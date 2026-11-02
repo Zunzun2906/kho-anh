@@ -1,0 +1,20 @@
+services:
+  ntfy:
+    image: binwiederhold/ntfy
+    restart: always
+    command: serve
+    environment: {TZ: Asia/Ho_Chi_Minh}
+    volumes: ["./ntfy:/var/lib/ntfy"]
+    ports: ["${TS_IP}:8081:80"]
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    restart: always
+    volumes: ["./kuma:/app/data"]
+    ports: ["${TS_IP}:3001:3001"]
+
+  beszel:
+    image: henrygd/beszel
+    restart: always
+    volumes: ["./beszel_data:/beszel_data"]
+    ports: ["${TS_IP}:8090:8090"]

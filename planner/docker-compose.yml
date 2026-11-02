@@ -1,0 +1,5 @@
+services:
+  planner:
+    build: .
+    restart: always
+    env_file: .env

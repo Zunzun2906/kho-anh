@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Encyclopedia Image Library</title>
+<style>
+ body{font-family:Georgia,serif;background:#f6f0e1;color:#2b2118;margin:0}
+ header{padding:20px;text-align:center;border-bottom:3px double #8a6d3b}
+ input{padding:8px;width:50%;font-size:16px} button{padding:8px 14px;font-size:16px}
+ .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;padding:20px}
+ figure{margin:0;background:#fffaf0;border:1px solid #c9b48a;padding:6px;text-align:center}
+ img{width:100%;aspect-ratio:1;object-fit:cover} figcaption{font-size:13px;margin-top:4px}
+ #gen{background:#fff3c4;padding:12px;text-align:center}
+ footer{padding:20px;max-width:520px;margin:auto} table{width:100%;border-collapse:collapse}
+ td,th{border:1px solid #c9b48a;padding:4px 8px}
+</style></head><body>
+<header><h1>AI Encyclopedia Image Library</h1>
+<form action="/search"><input name="q" value="{{ q }}" placeholder="Search in English, e.g. red hat" required>
+<button>Search</button></form></header>
+{% if generating %}
+<div id="gen">Our AI is drawing "<b>{{ q }}</b>" for you... <span id="sec">0</span>s
+ <div id="slow" hidden>The AI is busy; the image will be saved and appear automatically. Similar images are shown below.</div></div>
+{% endif %}
+<main class="grid">
+{% for im in images %}
+ <figure><img src="/img/{{ im.id }}" loading="lazy" alt="{{ im.name }}"><figcaption>{{ im.filename }}</figcaption></figure>
+{% endfor %}
+</main>
+<footer><h3>Statistics: {{ total }} images</h3>
+<table><tr><th>AI (member.ai)</th><th>Images</th></tr>
+{% for s in stats %}<tr><td>{{ s.member_id }}.{{ s.ai_no }}</td><td>{{ s.n }}</td></tr>{% endfor %}
+</table></footer>
+{% if generating %}
+<script>
+const id={{ req_id|tojson }}, q={{ q|tojson }}; let t=0;
+const iv=setInterval(async()=>{
+  t+=2; document.getElementById('sec').textContent=t;
+  if(t>45) document.getElementById('slow').hidden=false;
+  try{const j=await (await fetch('/api/result/'+id)).json();
+      if(j.status==='done'){clearInterval(iv);location.href='/search?q='+encodeURIComponent(q);}}catch(e){}
+},2000);
+</script>
+{% endif %}
+</body></html>

@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+jinja2
+redis
+psycopg[binary,pool]
+minio
+requests

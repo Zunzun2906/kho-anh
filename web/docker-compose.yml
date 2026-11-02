@@ -1,0 +1,12 @@
+# Nếu dùng Tailscale Funnel thì xóa service "tunnel" và chạy: sudo tailscale funnel --bg 8000
+services:
+  web:
+    build: .
+    restart: always
+    env_file: .env
+    ports: ["${TS_IP}:8000:8000"]
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: always
+    command: tunnel --no-autoupdate --url http://web:8000
+    depends_on: [web]

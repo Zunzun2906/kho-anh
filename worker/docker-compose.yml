@@ -1,0 +1,21 @@
+x-worker: &worker
+  build: .
+  restart: always
+  env_file: .env
+  volumes: ["hf_cache:/root/.cache/huggingface"]
+
+services:
+  ai1:
+    <<: *worker
+    environment:
+      AI_NO: "1"
+      STEPS: "2"
+      STYLE: "vintage encyclopedia engraving illustration, black ink line art, cross-hatching, plain white background, single object centered"
+  ai2:
+    <<: *worker
+    environment:
+      AI_NO: "2"
+      STEPS: "3"
+      STYLE: "antique encyclopedia plate, watercolor illustration, muted colors, cream paper background, labeled specimen, single object centered"
+
+volumes: {hf_cache: {}}

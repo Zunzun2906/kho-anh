@@ -1,0 +1,9 @@
+diffusers
+transformers
+accelerate
+safetensors
+redis
+psycopg[binary]
+minio
+pillow
+requests

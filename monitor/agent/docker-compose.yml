@@ -1,0 +1,10 @@
+# Chạy trên MỌI VM. Lấy KEY từ Beszel hub (Add System).
+services:
+  beszel-agent:
+    image: henrygd/beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes: ["/var/run/docker.sock:/var/run/docker.sock:ro"]
+    environment:
+      PORT: 45876
+      KEY: "ssh-ed25519 AAAA...dan_key_tu_hub"
